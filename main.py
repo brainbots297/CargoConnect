@@ -31,9 +31,6 @@ motor_pair.set_stop_action('hold')
 sensor_left = ColorSensor('E')
 sensor_right = ColorSensor('F')
 
-LineEdge1 = 50
-LineEdge2 = 50
-
 # **************************************************
 # **************************************************
 
@@ -56,9 +53,9 @@ def LineTrackRotations(power, rotations, gain, sensor, edge, stop):
     motor_C.set_degrees_counted(0)
     while motor_C.get_degrees_counted() <= rotations * 360:
         if edge == True:
-            error = LineEdge1 - sensor.get_reflected_light()
+            error = 50 - sensor.get_reflected_light()
         else:
-            error = sensor.get_reflected_light() - LineEdge1
+            error = sensor.get_reflected_light() - 50
         motor_pair.start_at_power(power, int(gain * error))
     if stop == True:
         motor_pair.stop()
@@ -66,9 +63,9 @@ def LineTrackRotations(power, rotations, gain, sensor, edge, stop):
 def LineTrackSensorBlack(power, gain, sensor_track, edge, sensor_stop, stop):
     while sensor_stop.get_reflected_light() > 20:
         if edge == True:
-            error = LineEdge1 - sensor_track.get_reflected_light()
+            error = 50 - sensor_track.get_reflected_light()
         else:
-            error = sensor_track.get_reflected_light() - LineEdge1
+            error = sensor_track.get_reflected_light() - 50
         motor_pair.start_at_power(power, int(gain * error))
     if stop == True:
         motor_pair.stop()
@@ -77,16 +74,6 @@ def LineTrackSensorBlack(power, gain, sensor_track, edge, sensor_stop, stop):
 # **************************************************
 # **************************************************
 def Ben():
-    global hub
-    global motor_pair
-    global motor_C
-    global motor_Y
-    global sensor_right
-    global sensor_left
-
-    global LineEdge1
-    global LineEdge2
-
     hub.motion_sensor.reset_yaw_angle()
 
     # leave launch area using gyro tracking
@@ -127,14 +114,6 @@ def Ben():
 # **************************************************
 # **************************************************
 def Soham():
-    global hub
-    global motor_pair
-    global motor_B
-    global motor_C
-    global motor_X
-    global motor_Y
-    global sensor_right
-    global sensor_left
 
     # move lift to bottom concurrently with robot move on mat
     motor_Y.set_stall_detection(True)
@@ -303,8 +282,6 @@ def Soham():
 # **************************************************
 # **************************************************
 def LiftToBottom():
-    global motor_Y
-
     motor_Y.set_stall_detection(False)
     motor_Y.set_degrees_counted(0)
     last_degrees_counted = 0
@@ -320,12 +297,6 @@ def LiftToBottom():
 # **************************************************
 # **************************************************
 def CargoConnect1():
-    global hub
-    global motor_pair
-    global motor_C
-    global motor_Y
-    global sensor_right
-    global sensor_left
 
     # leave launch area using gyro tracking
     hub.motion_sensor.reset_yaw_angle()
@@ -411,6 +382,9 @@ def CargoConnect1():
     LineTrackRotations(40, 3, 1.25, sensor_left, True, False)
     LineTrackSensorBlack(40, 1.25, sensor_left, True, sensor_right, True)
 
+
+# **************************************************
+# **************************************************
 def CargoConnect2():
 
     # turn towards cargo ship
